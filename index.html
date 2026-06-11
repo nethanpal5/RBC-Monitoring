@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Roving Branch Controllers Monitoring</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>ROVING BRANCH CONTROLLERS ASSIGNMENT MONITORING</h1>
+
+<div class="dashboard">
+
+<div class="card">
+<h2 id="activeCount">0</h2>
+<p>Active Assignments</p>
+</div>
+
+<div class="card">
+<h2 id="completedCount">0</h2>
+<p>Completed Assignments</p>
+</div>
+
+<div class="card">
+<h2 id="totalCount">0</h2>
+<p>Total Assignments</p>
+</div>
+
+</div>
+
+<div class="form">
+
+<input type="text" id="name" placeholder="Employee Name">
+
+<input type="text" id="employeeID" placeholder="Employee ID">
+
+<select id="assignmentType">
+<option>Reliever</option>
+<option>Temporary</option>
+<option>Permanent</option>
+</select>
+
+<input type="text" id="branch" placeholder="Branch">
+
+<input type="text" id="region" placeholder="Region">
+
+<input type="text" id="position" placeholder="Position">
+
+<input type="date" id="startDate">
+
+<input type="date" id="endDate">
+
+<select id="status">
+<option>Active</option>
+<option>Completed</option>
+</select>
+
+<input type="text" id="reason" placeholder="Reason">
+
+<input type="text" id="remarks" placeholder="Remarks">
+
+<button onclick="addAssignment()">Save Assignment</button>
+
+</div>
+
+<input
+type="text"
+id="searchBox"
+placeholder="Search Employee..."
+onkeyup="searchTable()">
+
+<button onclick="exportCSV()">Export Excel</button>
+
+<table id="assignmentTable">
+
+<thead>
+
+<tr>
+<th>Name</th>
+<th>ID</th>
+<th>Type</th>
+<th>Branch</th>
+<th>Region</th>
+<th>Position</th>
+<th>Started</th>
+<th>Ended</th>
+<th>Days</th>
+<th>Status</th>
+<th>Reason</th>
+<th>Remarks</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody></tbody>
+
+</table>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
