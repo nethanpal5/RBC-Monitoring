@@ -1,107 +1,314 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Roving Branch Controllers Monitoring</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>AMS Pro - Assignment Monitoring System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    font-family: Arial;
+    margin: 0;
+    background: #eef2f7;
+}
+
+/* LOGIN */
+#loginBox {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #1f3c88;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 300px;
+}
+
+.login-card input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+/* HEADER */
+header {
+    background: #1f3c88;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    display: none;
+}
+
+/* DASHBOARD */
+.stats {
+    display: flex;
+    gap: 10px;
+    margin: 20px;
+}
+
+.card {
+    flex: 1;
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+}
+
+.total { background: #34495e; }
+.pending { background: #f39c12; }
+.done { background: #27ae60; }
+
+/* CONTAINER */
+.container {
+    width: 95%;
+    max-width: 1100px;
+    margin: auto;
+    display: none;
+}
+
+/* FORM */
+form {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+input, select, button {
+    padding: 10px;
+}
+
+button {
+    background: #1f3c88;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* SEARCH */
+#search {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    background: white;
+    border-collapse: collapse;
+}
+
+th {
+    background: #1f3c88;
+    color: white;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+/* STATUS */
+.pendingStatus { color: orange; font-weight: bold; }
+.doneStatus { color: green; font-weight: bold; }
+.overdue { background: #ffdddd; }
+
+/* BUTTONS */
+.btn {
+    padding: 5px 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.doneBtn { background: green; color: white; }
+.delBtn { background: red; color: white; }
+
+.export {
+    margin: 10px 0;
+    background: #16a085;
+}
+</style>
 </head>
 
 <body>
 
+<!-- LOGIN -->
+<div id="loginBox">
+    <div class="login-card">
+        <h3>AMS LOGIN</h3>
+        <input type="text" id="user" placeholder="Username">
+        <input type="password" id="pass" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+</div>
+
+<header>
+    <h2>Assignment Monitoring System PRO</h2>
+</header>
+
 <div class="container">
 
-<h1>ROVING BRANCH CONTROLLERS ASSIGNMENT MONITORING</h1>
-
-<div class="dashboard">
-
-<div class="card">
-<h2 id="activeCount">0</h2>
-<p>Active Assignments</p>
+<!-- STATS -->
+<div class="stats">
+    <div class="card total">Total<br><span id="total">0</span></div>
+    <div class="card pending">Pending<br><span id="pending">0</span></div>
+    <div class="card done">Completed<br><span id="done">0</span></div>
 </div>
 
-<div class="card">
-<h2 id="completedCount">0</h2>
-<p>Completed Assignments</p>
-</div>
+<!-- FORM -->
+<form id="form">
+    <input type="text" id="task" placeholder="Task">
+    <input type="text" id="assigned">
+    <input type="date" id="deadline">
+    <select id="priority">
+        <option>Normal</option>
+        <option>High</option>
+        <option>Urgent</option>
+    </select>
+    <button>Add</button>
+</form>
 
-<div class="card">
-<h2 id="totalCount">0</h2>
-<p>Total Assignments</p>
-</div>
+<input type="text" id="search" placeholder="Search task / person...">
 
-</div>
+<button class="btn export" onclick="exportCSV()">Export CSV</button>
 
-<div class="form">
-
-<input type="text" id="name" placeholder="Employee Name">
-
-<input type="text" id="employeeID" placeholder="Employee ID">
-
-<select id="assignmentType">
-<option>Reliever</option>
-<option>Temporary</option>
-<option>Permanent</option>
-</select>
-
-<input type="text" id="branch" placeholder="Branch">
-
-<input type="text" id="region" placeholder="Region">
-
-<input type="text" id="position" placeholder="Position">
-
-<input type="date" id="startDate">
-
-<input type="date" id="endDate">
-
-<select id="status">
-<option>Active</option>
-<option>Completed</option>
-</select>
-
-<input type="text" id="reason" placeholder="Reason">
-
-<input type="text" id="remarks" placeholder="Remarks">
-
-<button onclick="addAssignment()">Save Assignment</button>
-
-</div>
-
-<input
-type="text"
-id="searchBox"
-placeholder="Search Employee..."
-onkeyup="searchTable()">
-
-<button onclick="exportCSV()">Export Excel</button>
-
-<table id="assignmentTable">
-
+<table>
 <thead>
-
 <tr>
-<th>Name</th>
-<th>ID</th>
-<th>Type</th>
-<th>Branch</th>
-<th>Region</th>
-<th>Position</th>
-<th>Started</th>
-<th>Ended</th>
-<th>Days</th>
-<th>Status</th>
-<th>Reason</th>
-<th>Remarks</th>
-<th>Action</th>
+    <th>Task</th>
+    <th>Assigned</th>
+    <th>Deadline</th>
+    <th>Priority</th>
+    <th>Status</th>
+    <th>Action</th>
 </tr>
-
 </thead>
-
-<tbody></tbody>
-
+<tbody id="table"></tbody>
 </table>
 
 </div>
 
-<script src="script.js"></script>
+<script>
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+/* LOGIN */
+function login(){
+    let u = document.getElementById("user").value;
+    let p = document.getElementById("pass").value;
+
+    if(u === "admin" && p === "1234"){
+        document.getElementById("loginBox").style.display = "none";
+        document.querySelector(".container").style.display = "block";
+        document.querySelector("header").style.display = "block";
+        render();
+    } else {
+        alert("Invalid login");
+    }
+}
+
+/* ADD */
+document.getElementById("form").addEventListener("submit", e => {
+    e.preventDefault();
+
+    tasks.push({
+        task: task.value,
+        assigned: assigned.value,
+        deadline: deadline.value,
+        priority: priority.value,
+        status: "Pending"
+    });
+
+    form.reset();
+    save();
+    render();
+});
+
+/* RENDER */
+function render(){
+    let table = document.getElementById("table");
+    table.innerHTML = "";
+
+    let search = document.getElementById("search").value.toLowerCase();
+
+    let total = tasks.length;
+    let pending = tasks.filter(t => t.status === "Pending").length;
+    let done = tasks.filter(t => t.status === "Done").length;
+
+    document.getElementById("total").innerText = total;
+    document.getElementById("pending").innerText = pending;
+    document.getElementById("done").innerText = done;
+
+    tasks.forEach((t,i) => {
+
+        if(!t.task.toLowerCase().includes(search) &&
+           !t.assigned.toLowerCase().includes(search)) return;
+
+        let isOverdue = t.status === "Pending" && new Date(t.deadline) < new Date();
+
+        table.innerHTML += `
+        <tr class="${isOverdue ? 'overdue' : ''}">
+            <td>${t.task}</td>
+            <td>${t.assigned}</td>
+            <td>${t.deadline}</td>
+            <td>${t.priority}</td>
+            <td class="${t.status === 'Done' ? 'doneStatus' : 'pendingStatus'}">
+                ${t.status}
+            </td>
+            <td>
+                <button class="btn doneBtn" onclick="toggle(${i})">✔</button>
+                <button class="btn delBtn" onclick="del(${i})">X</button>
+            </td>
+        </tr>`;
+    });
+
+    save();
+}
+
+/* ACTIONS */
+function toggle(i){
+    tasks[i].status = tasks[i].status === "Pending" ? "Done" : "Pending";
+    render();
+}
+
+function del(i){
+    tasks.splice(i,1);
+    render();
+}
+
+/* SAVE */
+function save(){
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+/* SEARCH */
+document.getElementById("search").addEventListener("input", render);
+
+/* EXPORT CSV */
+function exportCSV(){
+    let csv = "Task,Assigned,Deadline,Priority,Status\n";
+    tasks.forEach(t=>{
+        csv += `${t.task},${t.assigned},${t.deadline},${t.priority},${t.status}\n`;
+    });
+
+    let blob = new Blob([csv], {type:"text/csv"});
+    let a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "tasks.csv";
+    a.click();
+}
+
+/* INIT */
+render();
+</script>
 
 </body>
 </html>
